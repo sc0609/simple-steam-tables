@@ -8,12 +8,9 @@ interface InterpolationResult {
 
 export class SteamDataLoader {
   private static tempMap = new Map<number, SteamData>();
-  private static temperatures: number[] = [];
 
   static initialize() {
     // Store temperatures in sorted array for easier lookup
-    this.temperatures = steamData.data.map(([temp]) => temp).sort((a, b) => a - b);
-    
     steamData.data.forEach(([temp, p, vf, vg, uf, ug, ufg, hf, hg, hfg, sf, sg, sfg]) => {
       this.tempMap.set(temp, {
         temperature: temp,
