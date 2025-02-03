@@ -66,7 +66,7 @@ export function Footer() {
                   }
                 }}
               >
-                Sarthak
+                Sarthak Chavhan
               </Link>
             </Typography>
             
