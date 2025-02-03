@@ -1,50 +1,91 @@
-# React + TypeScript + Vite
+# Simple Steam Tables
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, simple and interactive web application for calculating thermodynamic properties of water and steam. Built with React, TypeScript, and Material-UI.
 
-Currently, two official plugins are available:
+![Steam Tables Screenshot](src/assets/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Three Calculation Modes**:
+  - Temperature-based saturated properties
+  - Pressure-based saturated properties
+  - Compressed liquid & superheated steam properties (T-P based)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Interactive Interface**:
+  - Real-time property calculations
+  - Customizable unit preferences
+  - Collapsible property sections
+  - Phase warnings and interpolation details
 
-- Configure the top-level `parserOptions` property like this:
+- **Supported Properties**:
+  - Pressure
+  - Temperature
+  - Specific Volume
+  - Internal Energy
+  - Enthalpy
+  - Entropy
+  - Phase information
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Unit Conversions**:
+  - Temperature: °C
+  - Pressure: MPa, bar, kPa, psi
+  - Specific Volume: m³/kg, cm³/g, ft³/lb
+  - Energy: kJ/kg, kcal/kg, BTU/lb
+  - Entropy: kJ/(kg·K)
+
+## Data Source
+
+The thermodynamic data is sourced from NIST via the University of Colorado Boulder's Department of Chemical and Biological Engineering ([ visit here for more details ](https://learncheme.com/student-resources/steam-tables/)). The data covers:
+- Saturated properties from 0.01°C to 373.95°C
+- Pressure range from 0.000611657 MPa to 22.064 MPa
+- Compressed and superheated properties up to 1000 MPa
+
+## Development
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/sc0609/simple-steam-tables.git
+
+# Navigate to project directory
+cd simple-steam-tables
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Building for Production
+```bash
+npm run build
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- University of Colorado Boulder for providing the steam table data
+- Material-UI team for the component library
+- All contributors and users of this project
+
+## Author
+
+Created by [Sarthak Chavhan](https://www.linkedin.com/in/sarthak-chavhan-4a87a422a/)
+
+## Links
+
+- [Live Demo](https://simple-steam-tables.vercel.app)
+- [GitHub Repository](https://github.com/sc0609/simple-steam-tables)
+- [Report Issues](https://github.com/sc0609/simple-steam-tables/issues)
