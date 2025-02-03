@@ -1,18 +1,24 @@
+interface ConversionFactors {
+  [key: string]: number;
+}
+
+const pressureConversions: ConversionFactors = {
+  'MPa_to_bar': 10,
+  'MPa_to_kPa': 1000,
+  'MPa_to_psi': 145.038,
+  'bar_to_MPa': 0.1,
+  'bar_to_kPa': 100,
+  'bar_to_psi': 14.5038,
+  'kPa_to_MPa': 0.001,
+  'kPa_to_bar': 0.01,
+  'kPa_to_psi': 0.145038,
+  'psi_to_MPa': 0.00689476,
+  'psi_to_bar': 0.0689476,
+  'psi_to_kPa': 6.89476
+};
+
 export const unitConversions = {
-  pressure: {
-    'MPa_to_bar': 10,
-    'MPa_to_kPa': 1000,
-    'MPa_to_psi': 145.038,
-    'bar_to_MPa': 0.1,
-    'bar_to_kPa': 100,
-    'bar_to_psi': 14.5038,
-    'kPa_to_MPa': 0.001,
-    'kPa_to_bar': 0.01,
-    'kPa_to_psi': 0.145038,
-    'psi_to_MPa': 0.00689476,
-    'psi_to_bar': 0.0689476,
-    'psi_to_kPa': 6.89476
-  },
+  pressure: pressureConversions,
   specificVolume: {
     'm³/kg_to_cm³/g': 1000000,
     'm³/kg_to_ft³/lb': 16.0185,

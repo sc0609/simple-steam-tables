@@ -201,7 +201,7 @@ export function CompressedCalculator() {
   ], [steamData, units]);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3.5, px: { xs: 1.75, sm: 2, md: 8 } }}>
+    <Container maxWidth="lg" sx={{ py: {xs: 0, sm: 2}, px: { xs: 1.75, sm: 2, md: 8 } }}>
       <Paper elevation={0} sx={{ 
         p: { xs: 2, sm: 3 },
         mb: { xs: 2, sm: 5 },
@@ -215,7 +215,7 @@ export function CompressedCalculator() {
         background: alpha(theme.palette.primary.main, 0.04),
       }}>
         <Typography variant="h4" sx={{ 
-          fontSize: '1.75rem',
+          fontSize: '1.25rem',
           fontWeight: 700,
           color: theme.palette.text.primary,
           mb: 3,

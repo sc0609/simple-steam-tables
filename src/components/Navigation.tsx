@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   ToggleButtonGroup,
   ToggleButton,
-  IconButton,
-  Menu,
-  MenuItem,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import CompressIcon from '@mui/icons-material/Compress';
 import WaterIcon from '@mui/icons-material/Water';
-import MenuIcon from '@mui/icons-material/Menu';
 import { alpha } from '@mui/material/styles';
 
 interface NavigationProps {
@@ -108,7 +104,7 @@ const Navigation: React.FC<NavigationProps> = ({ mode, onModeChange }) => {
             px: 4,
             py: 1.5,
             gap: 1.5,
-            fontSize: '0.95rem',
+            fontSize: '0.85rem',
             fontWeight: 500,
           }
         }}

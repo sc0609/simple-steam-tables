@@ -1,28 +1,58 @@
 export interface SteamData {
   temperature: number;
   pressure: number;
-  specificVolume: number | { f: number; g: number; fg: number };
-  internalEnergy: number | { f: number; g: number; fg: number };
-  enthalpy: number | { f: number; g: number; fg: number };
-  entropy: number | { f: number; g: number; fg: number };
+  specificVolume: {
+    f: number;
+    g: number;
+    fg: number;
+  };
+  internalEnergy: {
+    f: number;
+    g: number;
+    fg: number;
+  };
+  enthalpy: {
+    f: number;
+    g: number;
+    fg: number;
+  };
+  entropy: {
+    f: number;
+    g: number;
+    fg: number;
+  };
   phase?: string;
 }
 
-export interface PropertySet {
-  f: number;  // Saturated liquid
-  g: number;  // Saturated vapor
-  fg: number; // Vaporization
+export interface Property {
+  id: string;
+  title: string;
+  notation: string;
+  value: number | string;
+  description: string;
 }
 
-export type UnitPreferences = {
-  temperature: 'C';
+export interface UnitPreferences {
+  temperature: 'C' | '°C' | 'F' | 'K';
   pressure: 'MPa' | 'bar' | 'kPa' | 'psi';
   specificVolume: 'm³/kg' | 'cm³/g' | 'ft³/lb';
-  energy: 'kJ/kg' | 'kcal/kg' | 'BTU/lb';
-  entropy: 'kJ/(kg·K)' | 'kcal/(kg·K)' | 'BTU/(lb·°F)';
-};
+  energy: 'kJ/kg' | 'kcal/kg' | 'Btu/lb';
+  entropy: 'kJ/(kg·K)' | 'kcal/(kg·K)' | 'Btu/(lb·°F)';
+}
 
-export type CalculationMode = 'temperature' | 'pressure';
+export interface InterpolationBounds {
+  lower: {
+    temp: number;
+    pressure?: number;
+  };
+  upper: {
+    temp: number;
+    pressure?: number;
+  };
+  isExact?: boolean;
+}
+
+export type CalculationMode = 'temperature' | 'pressure' | 'compressed';
 
 export interface PropertyCard {
   title: string;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -104,11 +104,9 @@ const PropertyTitle = styled(Typography)(({ theme }) => ({
 interface PropertyCardProps {
   title: string;
   notation: string;
-  value: number | string;
+  value: number;
   unit: string;
-  availableUnits: string[];
   description: string;
-  onUnitChange: (newUnit: string) => void;
   onRemove: () => void;
 }
 
@@ -117,19 +115,9 @@ export function PropertyCard({
   notation,
   value,
   unit,
-  availableUnits,
   description,
-  onUnitChange,
   onRemove,
 }: PropertyCardProps) {
-  const theme = useTheme();
-  const [showDescription, setShowDescription] = useState(false);
-
-  const formatValue = (value: number | string) => {
-    if (typeof value === 'string') return value;
-    return value.toFixed(6).replace(/\.?0+$/, '');
-  };
-
   return (
     <StyledCard>
       <CardContent sx={{ 
@@ -185,15 +173,15 @@ export function PropertyCard({
 
         <ValueContainer>
           <ValueDisplay className="property-value">
-            {formatValue(value)}
+            {value.toFixed(6).replace(/\.?0+$/, '')}
           </ValueDisplay>
           <UnitSelect
             value={unit}
-            onChange={(e) => onUnitChange(e.target.value)}
+            onChange={(e) => {}}
             size="small"
             variant="outlined"
           >
-            {availableUnits.map((u) => (
+            {['MPa', 'bar', 'kPa', 'psi'].map((u) => (
               <MenuItem key={u} value={u}>
                 {u}
               </MenuItem>

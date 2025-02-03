@@ -18,63 +18,26 @@ import { styled, useTheme } from '@mui/material/styles';
 import { PropertyCard } from './PropertyCard';
 import { alpha } from '@mui/material/styles';
 import { PhaseCard } from './PhaseCard';
-
-interface Property {
-  id: string;
-  title: string;
-  notation: string;
-  value: number;
-  description: string;
-}
+import { Property } from '../types/steam';
 
 interface PropertySectionProps {
   title: string;
-  properties: Property[];
-  visibleProperties: Set<string>;
   unit: string;
   availableUnits: string[];
-  onUnitChange: (newUnit: string) => void;
+  properties: Property[];
+  visibleProperties: Set<string>;
   onToggleProperty: (propertyId: string) => void;
+  onUnitChange: (newUnit: string) => void;
 }
-
-const SectionContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1.5),
-  marginBottom: theme.spacing(1.5),
-  backgroundColor: '#ffffff',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: 'none',
-  border: '1.5px solid',
-  borderColor: theme.palette.divider,
-  transition: 'all 0.2s ease-in-out',
-  '&:hover': {
-    borderColor: theme.palette.primary.light,
-    backgroundColor: alpha(theme.palette.primary.main, 0.02),
-  },
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(0.75),
-  }
-}));
-
-const SectionHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  cursor: 'pointer',
-  padding: theme.spacing(0.5),
-  borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.035),
-  }
-}));
 
 export function PropertySection({
   title,
-  properties,
-  visibleProperties,
   unit,
   availableUnits,
-  onUnitChange,
+  properties,
+  visibleProperties,
   onToggleProperty,
+  onUnitChange,
 }: PropertySectionProps) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

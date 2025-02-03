@@ -272,7 +272,7 @@ export function SteamCalculator() {
 
   return (
     <Container maxWidth="lg" sx={{ 
-      py: {xs: 0, sm: 1.5},
+      py: {xs: 0, sm: 2},
       px: { xs: 1.75, sm: 2, md: 8 }
     }}>
       <Paper 
@@ -293,7 +293,7 @@ export function SteamCalculator() {
         <Typography 
           variant="h4" 
           sx={{ 
-            fontSize: '1.75rem',
+            fontSize: '1.25rem',
             fontWeight: 700,
             color: theme.palette.text.primary,
             mb: 3,
