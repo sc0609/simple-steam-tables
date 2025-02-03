@@ -1,5 +1,10 @@
-import { SteamData } from '../types/steam';
+import { SteamData, InterpolationBounds } from '../types/steam';
 import steamData from '../data/saturated_by_temperature_V1.5.json';
+
+interface InterpolationResult {
+  data: SteamData;
+  bounds: InterpolationBounds;
+}
 
 export class SteamDataLoader {
   private static tempMap = new Map<number, SteamData>();
@@ -37,10 +42,10 @@ export class SteamDataLoader {
     });
   }
 
-  static getInterpolatedData(temp: number): InterpolatedResult | null {
+  static getInterpolatedData(temperature: number): InterpolationResult | null {
     // First check if the exact temperature exists in the dataset
-    if (this.tempMap.has(temp)) {
-      const data = this.tempMap.get(temp)!;
+    if (this.tempMap.has(temperature)) {
+      const data = this.tempMap.get(temperature)!;
       return {
         data,
         bounds: {
@@ -52,8 +57,8 @@ export class SteamDataLoader {
     }
 
     // Find the nearest integer temperatures for interpolation
-    const lowerTemp = Math.floor(temp);
-    const upperTemp = Math.ceil(temp);
+    const lowerTemp = Math.floor(temperature);
+    const upperTemp = Math.ceil(temperature);
 
     // Get the data for these temperatures
     const data1 = this.tempMap.get(lowerTemp);
@@ -62,30 +67,30 @@ export class SteamDataLoader {
     if (!data1 || !data2) return null;
 
     // Linear interpolation
-    const fraction = (temp - lowerTemp) / (upperTemp - lowerTemp);
+    const fraction = (temperature - lowerTemp) / (upperTemp - lowerTemp);
 
     const interpolatedData = {
-      temperature: temp,
-      pressure: this.interpolateValue(data1.pressure, data2.pressure, lowerTemp, upperTemp, temp),
+      temperature: temperature,
+      pressure: this.interpolateValue(data1.pressure, data2.pressure, lowerTemp, upperTemp, temperature),
       specificVolume: {
-        f: this.interpolateValue(data1.specificVolume.f, data2.specificVolume.f, lowerTemp, upperTemp, temp),
-        g: this.interpolateValue(data1.specificVolume.g, data2.specificVolume.g, lowerTemp, upperTemp, temp),
-        fg: this.interpolateValue(data1.specificVolume.fg, data2.specificVolume.fg, lowerTemp, upperTemp, temp)
+        f: this.interpolateValue(data1.specificVolume.f, data2.specificVolume.f, lowerTemp, upperTemp, temperature),
+        g: this.interpolateValue(data1.specificVolume.g, data2.specificVolume.g, lowerTemp, upperTemp, temperature),
+        fg: this.interpolateValue(data1.specificVolume.fg, data2.specificVolume.fg, lowerTemp, upperTemp, temperature)
       },
       internalEnergy: {
-        f: this.interpolateValue(data1.internalEnergy.f, data2.internalEnergy.f, lowerTemp, upperTemp, temp),
-        g: this.interpolateValue(data1.internalEnergy.g, data2.internalEnergy.g, lowerTemp, upperTemp, temp),
-        fg: this.interpolateValue(data1.internalEnergy.fg, data2.internalEnergy.fg, lowerTemp, upperTemp, temp)
+        f: this.interpolateValue(data1.internalEnergy.f, data2.internalEnergy.f, lowerTemp, upperTemp, temperature),
+        g: this.interpolateValue(data1.internalEnergy.g, data2.internalEnergy.g, lowerTemp, upperTemp, temperature),
+        fg: this.interpolateValue(data1.internalEnergy.fg, data2.internalEnergy.fg, lowerTemp, upperTemp, temperature)
       },
       enthalpy: {
-        f: this.interpolateValue(data1.enthalpy.f, data2.enthalpy.f, lowerTemp, upperTemp, temp),
-        g: this.interpolateValue(data1.enthalpy.g, data2.enthalpy.g, lowerTemp, upperTemp, temp),
-        fg: this.interpolateValue(data1.enthalpy.fg, data2.enthalpy.fg, lowerTemp, upperTemp, temp)
+        f: this.interpolateValue(data1.enthalpy.f, data2.enthalpy.f, lowerTemp, upperTemp, temperature),
+        g: this.interpolateValue(data1.enthalpy.g, data2.enthalpy.g, lowerTemp, upperTemp, temperature),
+        fg: this.interpolateValue(data1.enthalpy.fg, data2.enthalpy.fg, lowerTemp, upperTemp, temperature)
       },
       entropy: {
-        f: this.interpolateValue(data1.entropy.f, data2.entropy.f, lowerTemp, upperTemp, temp),
-        g: this.interpolateValue(data1.entropy.g, data2.entropy.g, lowerTemp, upperTemp, temp),
-        fg: this.interpolateValue(data1.entropy.fg, data2.entropy.fg, lowerTemp, upperTemp, temp)
+        f: this.interpolateValue(data1.entropy.f, data2.entropy.f, lowerTemp, upperTemp, temperature),
+        g: this.interpolateValue(data1.entropy.g, data2.entropy.g, lowerTemp, upperTemp, temperature),
+        fg: this.interpolateValue(data1.entropy.fg, data2.entropy.fg, lowerTemp, upperTemp, temperature)
       }
     };
 
@@ -101,13 +106,4 @@ export class SteamDataLoader {
   private static interpolateValue(y1: number, y2: number, x1: number, x2: number, x: number): number {
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
   }
-}
-
-interface InterpolatedResult {
-  data: SteamData;
-  bounds: {
-    lower: SteamData;
-    upper: SteamData;
-    isExact?: boolean;
-  };
 } 

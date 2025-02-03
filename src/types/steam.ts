@@ -41,14 +41,8 @@ export interface UnitPreferences {
 }
 
 export interface InterpolationBounds {
-  lower: {
-    temp: number;
-    pressure?: number;
-  };
-  upper: {
-    temp: number;
-    pressure?: number;
-  };
+  lower: SteamData;
+  upper: SteamData;
   isExact?: boolean;
 }
 

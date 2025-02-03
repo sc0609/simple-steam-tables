@@ -2,6 +2,10 @@ interface ConversionFactors {
   [key: string]: number;
 }
 
+interface UnitConversions {
+  [category: string]: ConversionFactors;
+}
+
 const pressureConversions: ConversionFactors = {
   'MPa_to_bar': 10,
   'MPa_to_kPa': 1000,
@@ -17,7 +21,7 @@ const pressureConversions: ConversionFactors = {
   'psi_to_kPa': 6.89476
 };
 
-export const unitConversions = {
+export const unitConversions: UnitConversions = {
   pressure: pressureConversions,
   specificVolume: {
     'm³/kg_to_cm³/g': 1000000,
@@ -49,8 +53,8 @@ export function convertValue(value: number, fromUnit: string, toUnit: string): n
   if (fromUnit === toUnit) return value;
   
   const conversionKey = `${fromUnit}_to_${toUnit}`;
-  const conversionFactor = Object.values(unitConversions).reduce((factor, conversions) => {
-    return factor || conversions[conversionKey];
+  const conversionFactor = Object.values(unitConversions).reduce<number>((factor, conversions) => {
+    return factor || conversions[conversionKey] || 0;
   }, 0);
 
   if (!conversionFactor) {

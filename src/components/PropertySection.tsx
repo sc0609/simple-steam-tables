@@ -10,6 +10,7 @@ import {
   Paper,
   Collapse,
   Select,
+  SelectChangeEvent,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -30,6 +31,36 @@ interface PropertySectionProps {
   onUnitChange: (newUnit: string) => void;
 }
 
+const SectionContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(1.5),
+  marginBottom: theme.spacing(1.5),
+  backgroundColor: '#ffffff',
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: 'none',
+  border: '1.5px solid',
+  borderColor: theme.palette.divider,
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    borderColor: theme.palette.primary.light,
+    backgroundColor: alpha(theme.palette.primary.main, 0.02),
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(0.75),
+  }
+}));
+
+const SectionHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  cursor: 'pointer',
+  padding: theme.spacing(0.5),
+  borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.primary.main, 0.035),
+  }
+}));
+
 export function PropertySection({
   title,
   unit,
@@ -46,9 +77,9 @@ export function PropertySection({
   const isPhaseSection = title === 'Phase';
   const visibleProps = properties.filter(p => visibleProperties.has(p.id));
 
-  const handleUnitChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleUnitChange = (event: SelectChangeEvent<string>) => {
     event.stopPropagation();
-    onUnitChange(event.target.value as string);
+    onUnitChange(event.target.value);
   };
 
   const handleAddClick = (event: React.MouseEvent<HTMLButtonElement>) => {

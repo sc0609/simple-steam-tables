@@ -63,11 +63,17 @@ export function CompressedCalculator() {
   useEffect(() => {
     try {
       CompressedDataLoader.initialize();
+      
       const tempValue = parseFloat(temperature);
       const pressValue = parseFloat(pressure);
       
       if (!isNaN(tempValue) && !isNaN(pressValue)) {
-        debouncedDataUpdate(tempValue, pressValue);
+        const result = CompressedDataLoader.getData(tempValue, pressValue);
+        if (result) {
+          setSteamData(result.data);
+          setPhaseWarning(result.warning || '');
+          setError('');
+        }
       }
     } catch (err) {
       setError('Error loading steam data');
@@ -151,7 +157,7 @@ export function CompressedCalculator() {
           id: 'v',
           title: 'Specific Volume',
           notation: 'v',
-          value: convertValue(steamData?.specificVolume || 0, 'm³/kg', units.specificVolume),
+          value: convertValue(steamData?.specificVolume.f || 0, 'm³/kg', units.specificVolume),
           description: 'Specific volume at given conditions'
         }
       ]
@@ -165,7 +171,7 @@ export function CompressedCalculator() {
           id: 'u',
           title: 'Internal Energy',
           notation: 'u',
-          value: convertValue(steamData?.internalEnergy || 0, 'kJ/kg', units.energy),
+          value: convertValue(steamData?.internalEnergy.f || 0, 'kJ/kg', units.energy),
           description: 'Internal energy at given conditions'
         }
       ]
@@ -179,7 +185,7 @@ export function CompressedCalculator() {
           id: 'h',
           title: 'Enthalpy',
           notation: 'h',
-          value: convertValue(steamData?.enthalpy || 0, 'kJ/kg', units.energy),
+          value: convertValue(steamData?.enthalpy.f || 0, 'kJ/kg', units.energy),
           description: 'Enthalpy at given conditions'
         }
       ]
@@ -193,7 +199,7 @@ export function CompressedCalculator() {
           id: 's',
           title: 'Entropy',
           notation: 's',
-          value: convertValue(steamData?.entropy || 0, 'kJ/(kg·K)', units.entropy),
+          value: convertValue(steamData?.entropy.f || 0, 'kJ/(kg·K)', units.entropy),
           description: 'Entropy at given conditions'
         }
       ]

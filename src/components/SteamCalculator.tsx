@@ -11,7 +11,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { SteamDataLoader } from '../utils/dataLoader';
-import { SteamData, UnitPreferences, CalculationMode } from '../types/steam';
+import { SteamData, UnitPreferences, CalculationMode, InterpolationBounds } from '../types/steam';
 import { convertValue } from '../utils/unitConverter';
 import { PropertySection } from './PropertySection';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -40,11 +40,7 @@ export function SteamCalculator() {
     'sf', 'sg', 'sfg'
   ]));
   const [useDoubleInterpolation, setUseDoubleInterpolation] = useState(false);
-  const [interpolationBounds, setInterpolationBounds] = useState<{
-    lower: { temp: number; pressure?: number };
-    upper: { temp: number; pressure?: number };
-    isExact?: boolean;
-  } | null>(null);
+  const [interpolationBounds, setInterpolationBounds] = useState<InterpolationBounds | null>(null);
 
   const theme = useTheme();
 

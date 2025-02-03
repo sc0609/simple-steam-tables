@@ -44,8 +44,8 @@ export class PressureDataLoader {
       return {
         data,
         bounds: {
-          lower: { pressure: pressure, ...data },
-          upper: { pressure: pressure, ...data },
+          lower: data,
+          upper: data,
           isExact: true
         }
       };
@@ -69,8 +69,8 @@ export class PressureDataLoader {
     return {
       data: interpolatedData,
       bounds: {
-        lower: { pressure: p1, ...data1 },
-        upper: { pressure: p2, ...data2 },
+        lower: data1,
+        upper: data2,
         isExact: false
       }
     };

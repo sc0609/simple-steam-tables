@@ -1,5 +1,5 @@
 import { SteamData } from '../types/steam';
-import compressedData from '../data/compressed_liquid_and_superheated_steam_V1.3.json';
+import steamData from '../data/steamData';
 
 interface DataPoint {
   pressure: number;
@@ -13,35 +13,33 @@ interface DataPoint {
 }
 
 export class CompressedDataLoader {
-  private static dataPoints: DataPoint[] = [];
+  private static data: DataPoint[] = [];
   private static initialized = false;
   private static temperatureMap = new Map<number, DataPoint[]>();
   private static pressureMap = new Map<number, DataPoint[]>();
 
-  static initialize() {
+  static initialize(): void {
     if (this.initialized) return;
     
-    // Convert data to structured format and create indexes
-    this.dataPoints = compressedData.data.map(([p, t, v, d, u, h, s, phase]) => ({
-      pressure: p,
-      temperature: t,
-      specificVolume: v,
-      density: d,
-      internalEnergy: u,
-      enthalpy: h,
-      entropy: s,
-      phase: phase as string
+    // Convert array data to structured format
+    this.data = steamData.data.map(row => ({
+      pressure: Number(row[0]),    // Pressure (MPa)
+      temperature: Number(row[1]), // Temperature (°C)
+      specificVolume: Number(row[2]), // Specific Volume (m^3/kg)
+      density: Number(row[3]),     // Density (kg/m^3)
+      internalEnergy: Number(row[4]), // Internal Energy (kJ/kg)
+      enthalpy: Number(row[5]),    // Enthalpy (kJ/kg)
+      entropy: Number(row[6]),     // Entropy [kJ/(kg K)]
+      phase: row[7] as string      // Phase
     }));
 
-    // Create temperature and pressure indexes for faster lookups
-    this.dataPoints.forEach(point => {
-      // Temperature index
+    // Create indexes for faster lookups
+    this.data.forEach(point => {
       if (!this.temperatureMap.has(point.temperature)) {
         this.temperatureMap.set(point.temperature, []);
       }
       this.temperatureMap.get(point.temperature)!.push(point);
 
-      // Pressure index
       if (!this.pressureMap.has(point.pressure)) {
         this.pressureMap.set(point.pressure, []);
       }
@@ -51,52 +49,54 @@ export class CompressedDataLoader {
     this.initialized = true;
   }
 
-  static getData(temperature: number, pressure: number) {
-    // Find closest temperature and pressure points
-    const temps = Array.from(this.temperatureMap.keys()).sort((a, b) => Math.abs(a - temperature) - Math.abs(b - temperature));
-    const pressures = Array.from(this.pressureMap.keys()).sort((a, b) => Math.abs(a - pressure) - Math.abs(b - pressure));
+  static getData(temperature: number, pressure: number): { 
+    data: SteamData; 
+    warning?: string;
+  } | null {
+    const temps = Array.from(this.temperatureMap.keys())
+      .sort((a, b) => Math.abs(a - temperature) - Math.abs(b - temperature));
+    const pressures = Array.from(this.pressureMap.keys())
+      .sort((a, b) => Math.abs(a - pressure) - Math.abs(b - pressure));
 
-    // Get the closest points
-    const points = this.dataPoints.filter(p => 
+    const points = this.data.filter(p => 
       (Math.abs(p.temperature - temps[0]) < 0.1 || Math.abs(p.temperature - temps[1]) < 0.1) &&
       (Math.abs(p.pressure - pressures[0]) < 0.01 || Math.abs(p.pressure - pressures[1]) < 0.01)
     );
 
-    if (points.length === 0) {
-      return null;
-    }
-
-    // Sort by distance to target point
-    points.sort((a, b) => {
-      const distA = Math.sqrt(
-        Math.pow((a.temperature - temperature) / 373.95, 2) + // Normalize by max values
-        Math.pow((a.pressure - pressure) / 1000, 2)
-      );
-      const distB = Math.sqrt(
-        Math.pow((b.temperature - temperature) / 373.95, 2) +
-        Math.pow((b.pressure - pressure) / 1000, 2)
-      );
-      return distA - distB;
-    });
+    if (points.length === 0) return null;
 
     const nearest = points[0];
-    const phases = new Set(points.slice(0, 4).map(p => p.phase));
-
-    let warning = '';
-    if (phases.size > 1) {
-      warning = 'Warning: Interpolation between different phases may be inaccurate. The lower and upper bounds must be the same phase for accurate interpolation.';
-    }
+    const warning = points.slice(0, 4).map(p => p.phase)
+      .filter((v, i, a) => a.indexOf(v) === i).length > 1 
+      ? 'Warning: Interpolation between different phases may be inaccurate'
+      : undefined;
 
     return {
       data: {
         temperature: nearest.temperature,
         pressure: nearest.pressure,
-        specificVolume: nearest.specificVolume,
-        internalEnergy: nearest.internalEnergy,
-        enthalpy: nearest.enthalpy,
-        entropy: nearest.entropy,
+        specificVolume: {
+          f: nearest.specificVolume,
+          g: nearest.specificVolume,
+          fg: 0
+        },
+        internalEnergy: {
+          f: nearest.internalEnergy,
+          g: nearest.internalEnergy,
+          fg: 0
+        },
+        enthalpy: {
+          f: nearest.enthalpy,
+          g: nearest.enthalpy,
+          fg: 0
+        },
+        entropy: {
+          f: nearest.entropy,
+          g: nearest.entropy,
+          fg: 0
+        },
         phase: nearest.phase
-      } as SteamData,
+      },
       warning
     };
   }

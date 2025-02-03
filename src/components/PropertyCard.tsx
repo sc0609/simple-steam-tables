@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Card,
   CardContent,
@@ -8,13 +7,12 @@ import {
   Box,
   Tooltip,
   IconButton,
-  InputLabel,
+  SelectChangeEvent,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
-import { useTheme } from '@mui/material/styles';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -24,7 +22,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   transition: 'all 0.2s ease-in-out',
   border: '1.5px solid',
   borderColor: alpha(theme.palette.primary.main, 0.1),
-  backgroundColor: theme.palette.background.paper,
   padding: theme.spacing(1),
   backgroundColor: alpha(theme.palette.primary.main, 0.02),
   '&:hover': {
@@ -85,7 +82,7 @@ const UnitSelect = styled(Select)(({ theme }) => ({
   },
 }));
 
-const PropertyTitle = styled(Typography)(({ theme }) => ({
+const PropertyTitle = styled('div')(({ theme }) => ({
   fontSize: '0.95rem',
   fontFamily: '"JetBrains Mono", monospace',
   fontWeight: 600,
@@ -98,7 +95,7 @@ const PropertyTitle = styled(Typography)(({ theme }) => ({
     fontFamily: '"Inter", sans-serif',
     fontWeight: 400,
     fontSize: '0.85rem',
-  }
+  },
 }));
 
 interface PropertyCardProps {
@@ -106,7 +103,9 @@ interface PropertyCardProps {
   notation: string;
   value: number;
   unit: string;
+  availableUnits: string[];
   description: string;
+  onUnitChange: (newUnit: string) => void;
   onRemove: () => void;
 }
 
@@ -115,18 +114,22 @@ export function PropertyCard({
   notation,
   value,
   unit,
+  availableUnits,
   description,
+  onUnitChange,
   onRemove,
 }: PropertyCardProps) {
   return (
     <StyledCard>
-      <CardContent sx={{ 
-        p: 1,
-        '&:last-child': { pb: 1 },
-      }}>
-        <Box 
+      <CardContent
+        sx={{
+          p: 1,
+          '&:last-child': { pb: 1 },
+        }}
+      >
+        <Box
           className="action-buttons"
-          sx={{ 
+          sx={{
             position: 'absolute',
             top: 6,
             right: 4,
@@ -136,36 +139,43 @@ export function PropertyCard({
             transition: 'opacity 0.2s ease-in-out',
           }}
         >
-          <Tooltip 
-            title={description} 
+          <Tooltip
+            title={description}
             placement="top"
             enterTouchDelay={0}
             leaveTouchDelay={1500}
           >
-            <IconButton size="small" sx={{ 
-              padding: 0.5,
-              backgroundColor: 'rgba(0,0,0,0.04)'
-            }}>
+            <IconButton
+              size="small"
+              sx={{
+                padding: 0.5,
+                backgroundColor: 'rgba(0,0,0,0.04)',
+              }}
+            >
               <InfoIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip 
-            title="Remove" 
+          <Tooltip
+            title="Remove"
             placement="top"
             enterTouchDelay={0}
             leaveTouchDelay={1500}
           >
-            <IconButton size="small" onClick={onRemove} sx={{ 
-              padding: 0.5,
-              backgroundColor: 'rgba(0,0,0,0.04)'
-            }}>
+            <IconButton
+              size="small"
+              onClick={onRemove}
+              sx={{
+                padding: 0.5,
+                backgroundColor: 'rgba(0,0,0,0.04)',
+              }}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         </Box>
 
         <Box sx={{ pt: -1, pb: 1 }}>
-          <PropertyTitle component="div">
+          <PropertyTitle>
             {notation}
             <span className="title-suffix">({title})</span>
           </PropertyTitle>
@@ -177,11 +187,11 @@ export function PropertyCard({
           </ValueDisplay>
           <UnitSelect
             value={unit}
-            onChange={(e) => {}}
+            onChange={(e) => onUnitChange(e.target.value as string)}
             size="small"
             variant="outlined"
           >
-            {['MPa', 'bar', 'kPa', 'psi'].map((u) => (
+            {availableUnits.map((u) => (
               <MenuItem key={u} value={u}>
                 {u}
               </MenuItem>
@@ -191,4 +201,4 @@ export function PropertyCard({
       </CardContent>
     </StyledCard>
   );
-} 
+}
