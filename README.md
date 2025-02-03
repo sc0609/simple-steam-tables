@@ -86,6 +86,6 @@ Created by [Sarthak Chavhan](https://www.linkedin.com/in/sarthak-chavhan-4a87a42
 
 ## Links
 
-- [Live Demo](https://simple-steam-tables.vercel.app)
+- [Live Demo](https://steamtables.vercel.app)
 - [GitHub Repository](https://github.com/sc0609/simple-steam-tables)
 - [Report Issues](https://github.com/sc0609/simple-steam-tables/issues)
