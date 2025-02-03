@@ -2,7 +2,7 @@
 
 A modern, simple and interactive web application for calculating thermodynamic properties of water and steam. Built with React, TypeScript, and Material-UI.
 
-![Steam Tables Screenshot](src/assets/screenshot.png)
+![Steam Tables Screenshot](https://github.com/sc0609/simple-steam-tables/blob/main/src/assets/Screenshot.png)
 
 ## Features
 
